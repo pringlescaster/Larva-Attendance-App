@@ -26,3 +26,49 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Add to your global CSS file or a dedicated stylesheet */
+
+.react-datepicker__triangle {
+  display: none; /* Hide the triangle that points to the input */
+}
+
+.react-datepicker {
+  border-radius: 8px; /* Change the border radius of the calendar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+.react-datepicker__header {
+  background-color: #f7f7f7; /* Change header background color */
+  border-bottom: 1px solid #e0e0e0; /* Change header bottom border */
+}
+
+.react-datepicker__day--selected {
+  background-color: #007bff; /* Change selected day background color */
+  color: white; /* Change text color of selected day */
+}
+
+.react-datepicker__day:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}
+
+.react-datepicker__month-container {
+  border: 1px solid #e0e0e0; /* Change border color */
+}
+
+/* Add these styles to your global CSS file or a dedicated stylesheet */
+.react-datepicker-custom .react-datepicker__header {
+  @apply bg-gray-200 border-b border-gray-300; /* Apply Tailwind styles */
+}
+
+.react-datepicker-custom .react-datepicker__day--selected {
+  @apply bg-blue-500 text-white; /* Apply Tailwind styles */
+}
+
+.react-datepicker-custom .react-datepicker__day:hover {
+  @apply bg-gray-100; /* Apply Tailwind styles */
+}
+
+.react-datepicker-custom .react-datepicker__month-container {
+  @apply border border-gray-300; /* Apply Tailwind styles */
+}
