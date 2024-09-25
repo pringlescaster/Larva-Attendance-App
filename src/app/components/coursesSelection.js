@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dropdownArrow from "../../../public/assets/dropdownArrow.svg";
 import Image from "next/image";
 
-function CoursesSelection() {
+function CoursesSelection({ onCourseChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Select Course");
   const dropdownRef = useRef(null);
@@ -14,6 +14,9 @@ function CoursesSelection() {
   const selectOption = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    if (onCourseChange) {
+      onCourseChange(option); // Call the onCourseChange prop with the selected option
+    }
   };
 
   const handleClickOutside = (event) => {

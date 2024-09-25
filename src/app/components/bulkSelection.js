@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dropdownArrow from "../../../public/assets/dropdownArrow.svg";
 import Image from "next/image";
 
-function BulkSelection() {
+function BulkSelection({ onBulkFilterChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Bulk Selection");
   const dropdownRef = useRef(null);
@@ -14,6 +14,9 @@ function BulkSelection() {
   const selectOption = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    if (onBulkFilterChange) {
+      onBulkFilterChange(option); // Call the onBulkFilterChange prop with the selected option
+    }
   };
 
   const handleClickOutside = (event) => {
@@ -27,7 +30,7 @@ function BulkSelection() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  });
+  }, []);
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">

@@ -23,9 +23,9 @@ function page() {
        <div className="w-[60%] hidden py-8 gap-y-6 px-8 md:flex flex-col items-center">
             
 
-            <div className=" px-6 password-sm w-full text-[#333333] grid  gap-y-4">
+            <div className=" px-6 password-sm text-sm w-full text-[#333333] grid  gap-y-4">
               <input
-                className="w-full text-[#333333] rounded-lg outline-[#F39B3B] password-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                className="w-full  text-[#333333] rounded-lg outline-[#F39B3B] password-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                 type="password"
                 placeholder="Current Password"
                 onChange={handleInputChange}

@@ -7,7 +7,7 @@ import dropdownArrow from "../../../public/assets/dropdownArrow.svg"; // Import 
 
 
 // Define the CalendarSelection component
-function CalendarSelection() {
+function CalendarSelection({onDateChange}) {
   // State to manage whether the dropdown is open or closed
   const [isOpen, setIsOpen] = useState(false);
   
@@ -61,7 +61,7 @@ function CalendarSelection() {
       </button>
       {/* Conditionally render the DatePicker if the dropdown is open */}
       {isOpen && (
-        <div className="absolute right- mt-2 bg-white border rounded-md shadow-md z-10">
+        <div className="absolute  right- mt-2 bg-white border rounded-md  shadow-md z-10">
           <DatePicker className='bg-black'
             selected={selectedDate} // Pass the selected date to DatePicker
             onChange={handleDateChange} // Update date on change

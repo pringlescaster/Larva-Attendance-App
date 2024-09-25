@@ -69,7 +69,7 @@ function Sidebar({ closeSidebar }) {
         </div>
       </aside>
 
-      <aside className="px-4 md:hidden py-8 h-screen flex flex-col justify-between w-[80%] gap-y-4 lg:hidden overflow-y-auto">
+      <aside className="px-4 md:hidden py-8 h-screen flex flex-col justify-between w-[80%] lg:hidden overflow-y-auto">
         <div className="flex justify-between items-start mb-4">
           <div className="grid gap-y-[8px]">
             <Image className="w-12" src={profileImage} alt="Profile Image" />
@@ -86,7 +86,7 @@ function Sidebar({ closeSidebar }) {
           />
         </div>
 
-        <div className="text-[#222222] font-semibold text-sm flex flex-col gap-y-6 mb-4">
+        <div className="text-[#222222] font-semibold text-sm flex flex-col gap-y-6 mb-48">
           <Link href="/dashboard/markattendance">
             <span
               className={`cursor-pointer ${
@@ -129,7 +129,7 @@ function Sidebar({ closeSidebar }) {
           </Link>
         </div>
 
-        <div className="flex gap-x-2 text-[#222222] text-sm font-semibold">
+        <div className="mb-48 flex gap-x-2 text-[#222222] text-sm font-semibold">
           <Image src={logoIcon} alt="Logout Icon" />
           <h1 className="font-semibold cursor-pointer">Log Out</h1>
         </div>
