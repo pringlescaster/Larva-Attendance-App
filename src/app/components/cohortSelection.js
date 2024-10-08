@@ -6,6 +6,16 @@ function CohortSelection({ onCohortChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Select Cohort");
   const dropdownRef = useRef(null);
+  const [cohorts, setCohorts] = useState([]); // State for cohorts
+
+  // Fetch cohorts data (you can replace this with your API call)
+  useEffect(() => {
+    const fetchCohorts = async () => {
+      const fetchedCohorts = ["Cohort 1", "Cohort 2", "Cohort 3", "Cohort 4"];
+      setCohorts(fetchedCohorts);
+    };
+    fetchCohorts();
+  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -30,14 +40,14 @@ function CohortSelection({ onCohortChange }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []); // Added dependency array to prevent multiple event listeners
+  }, []);
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">
       {/* Dropdown Button with Icon */}
       <button
         onClick={toggleDropdown}
-        className="text-[#2c2c2c] justify-between text-[12px] font-semibold bg-white shadow-md px-3 py-3 rounded-sm w-48 flex gap-x-4 items-center"
+        className="text-[#2c2c2c] justify-between text-[12px] font-semibold bg-white shadow-md px-2 py-3 rounded-sm w-48 flex gap-x-4 items-center"
       >
         <span className="ml-2">{selectedOption}</span>
         <Image src={dropdownArrow} alt="Dropdown Arrow" />
@@ -46,16 +56,16 @@ function CohortSelection({ onCohortChange }) {
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className="absolute right-0 text-sm mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
+          className="absolute right-0 text-sm text-left mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
           style={{ zIndex: 1000 }} // Adjust z-index as needed
         >
-          {["1", "2", "3", "4"].map((option) => (
+          {cohorts.map((cohort) => (
             <button
-              key={option}
-              onClick={() => selectOption(option)}
+              key={cohort}
+              onClick={() => selectOption(cohort)}
               className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
             >
-              {option}
+              {cohort}
             </button>
           ))}
         </div>

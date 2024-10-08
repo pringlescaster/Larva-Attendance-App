@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dropdownArrow from "../../../public/assets/dropdownArrow.svg";
 import Image from "next/image";
 
-function BulkSelection({ onBulkFilterChange }) {
+function BulkSelection({ onBulkFilterChange, students, setAttendanceStatus }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Bulk Selection");
   const dropdownRef = useRef(null);
@@ -16,7 +16,17 @@ function BulkSelection({ onBulkFilterChange }) {
     setIsOpen(false);
     if (onBulkFilterChange) {
       onBulkFilterChange(option); // Call the onBulkFilterChange prop with the selected option
+      handleBulkAction(option); // Apply the bulk action
     }
+  };
+
+  const handleBulkAction = (action) => {
+    const updatedStatus = {};
+    students.forEach(student => {
+      updatedStatus[student._id] = action === "Mark all as present" ? "present" :
+                                   action === "Mark all as absent" ? "absent" : "left";
+    });
+    setAttendanceStatus(prevStatus => ({ ...prevStatus, ...updatedStatus }));
   };
 
   const handleClickOutside = (event) => {
@@ -34,7 +44,6 @@ function BulkSelection({ onBulkFilterChange }) {
 
   return (
     <div ref={dropdownRef} className="relative inline-block text-left">
-      {/* Dropdown Button with Icon */}
       <button
         onClick={toggleDropdown}
         className="text-[#2c2c2c] justify-between text-[12px] font-semibold bg-white shadow-md px-3 py-3 rounded-sm w-48 flex gap-x-4 items-center"
@@ -43,11 +52,10 @@ function BulkSelection({ onBulkFilterChange }) {
         <Image src={dropdownArrow} alt="Filter Icon" className="" />
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div
           className="absolute right-0 text-sm mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
-          style={{ zIndex: 1000 }} // Adjust z-index as needed
+          style={{ zIndex: 1000 }}
         >
           <button
             onClick={() => selectOption("Mark all as present")}

@@ -8,13 +8,8 @@ import dropdownArrow from "../../../public/assets/dropdownArrow.svg"; // Import 
 
 // Define the CalendarSelection component
 function CalendarSelection({onDateChange}) {
-  // State to manage whether the dropdown is open or closed
   const [isOpen, setIsOpen] = useState(false);
-  
-  // State to manage the selected date
-  const [selectedDate, setSelectedDate] = useState(null);
-  
-  // Ref to attach to the dropdown container for click outside detection
+  const[ selectedDate, setSelectedDate] = useState(null);
   const dropdownRef = useRef(null);
 
   // Function to toggle the dropdown visibility
@@ -26,6 +21,7 @@ function CalendarSelection({onDateChange}) {
   const handleDateChange = (date) => {
     setSelectedDate(date); // Update the selected date state
     setIsOpen(false); // Close the dropdown after selecting a date
+    onDateChange(date); // Call the parent component's onDateChange function with the selected date
   };
 
   // Function to handle clicks outside the dropdown to close it

@@ -1,21 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../../../context/authContext";
 import Sidebar from "@/app/components/sidebar";
 import Navbar from "@/app/components/navbar";
 import Image from "next/image";
 import registerProfile from "../../../../public/assets/registerProfile.svg";
+import axios from "axios";
 
 function Page() {
+  const { user, logout, error } = useContext(AuthContext);
   const [showSideBar, setShowSideBar] = useState(false);
+  const [ notification, setNotification] = useState("");
   const [studentData, setStudentData] = useState({
     name: "",
     studentnumber: "",
     course: "",
     cohort: "",
   });
-  const [message, setMessage] = useState("");
   const currentPage = "Register Student";
+  const [message, setMessage] = useState("");
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,46 +33,50 @@ function Page() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("authToken");
-  
+
     if (!token) {
-      setMessage("Authentication token not found.");
+      setMessage("Check your internet connection");
       return;
     }
-  
-    try {
-      const response = await fetch("http://localhost:2000/addstudents", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Ensure token is prefixed with "Bearer "
-        },
-        body: JSON.stringify(studentData),
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (response.status === 201) {
-          setMessage("Student registered successfully.");
-          setStudentData({ name: "", studentnumber: "", course: "", cohort: "" });
-        } else {
-          setMessage(data.msg || "Error registering student");
-        }
-      } else {
-        const errorData = await response.json();
-        setMessage(errorData.msg || "Error registering student");
+  try {
+    const response = await axios.post(
+      "http://localhost:2000/api/v1/student/register",
+      studentData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    } catch (error) {
-      console.error("Error registering student:", error);
-      setMessage("Error registering student");
+    );
+
+    if (response.status === 201) {
+      setMessage ("Student registerd successfully");
+      setStudentData({  name: "",
+        studentnumber: "",
+        course: "",
+        cohort: "",
+      });
     }
-  };
-  
+    else { 
+      setMessage(response.data.message || " Error registering student");
+    }
+  } catch (error) {
+    console.error("Error registering student:", error);
+    setMessage("Error registering student");
+  }
+};
+    
+
   return (
     <>
       {/* Mobile View - Sidebar toggles with hamburger */}
       <div className="flex md:hidden">
         {showSideBar ? (
-          <Sidebar closeSidebar={() => setShowSideBar(false)} currentPage={currentPage} />
+          <Sidebar
+            closeSidebar={() => setShowSideBar(false)}
+            currentPage={currentPage}
+          />
         ) : (
           <Navbar openSidebar={() => setShowSideBar(true)} />
         )}
@@ -79,13 +88,21 @@ function Page() {
         <div className="flex-grow overflow-x-hidden">
           <Navbar />
           <div className="py-5 border-b-2 border-[#e9e9e9] px-8 bg-[#FAF9F9]">
-            <h1 className="text-[#1a1a1a] text-center font-semibold">Register Students</h1>
+            <h1 className="text-[#1a1a1a] text-center font-semibold">
+              Register Students
+            </h1>
           </div>
           <div className="bg-[#FAF9F9]">
             <div className="py-8 gap-y-4 px-8 flex flex-col items-center max-w-lg mx-auto">
               <div className="flex flex-col gap-y-2">
-                <Image className="w-[120px]" src={registerProfile} alt="Register Profile" />
-                <button className="text-[#f39b3b] font-semibold">Add Photo</button>
+                <Image
+                  className="w-[120px]"
+                  src={registerProfile}
+                  alt="Register Profile"
+                />
+                <button className="text-[#f39b3b] font-semibold">
+                  Add Photo
+                </button>
               </div>
               <form onSubmit={handleSubmit} className="w-full space-y-4">
                 <input
@@ -124,7 +141,10 @@ function Page() {
                   placeholder="Cohort"
                   required
                 />
-                <button type="submit" className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base">
+                <button
+                  type="submit"
+                  className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"
+                >
                   Register Student
                 </button>
               </form>
@@ -136,13 +156,22 @@ function Page() {
 
       {/* Mobile View - Registration Form */}
       <div className="md:hidden flex flex-col px-4 gap-y-4">
-        <h1 className="text-[#1a1a1a] text-center font-semibold">Register Students</h1>
+        <h1 className="text-[#1a1a1a] text-center font-semibold">
+          Register Students
+        </h1>
         <div className="py-8 gap-y-6 px-8 flex flex-col items-center">
           <div className="flex flex-col gap-y-2">
-            <Image className="w-[100px]" src={registerProfile} alt="Register Profile" />
+            <Image
+              className="w-[100px]"
+              src={registerProfile}
+              alt="Register Profile"
+            />
             <button className="text-[#f39b3b] font-semibold">Add Photo</button>
           </div>
-          <form onSubmit={handleSubmit} className="px-4 text-sm w-screen grid gap-y-4">
+          <form
+            onSubmit={handleSubmit}
+            className="px-4 text-sm w-screen grid gap-y-4"
+          >
             <input
               className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
               type="text"
@@ -179,7 +208,10 @@ function Page() {
               placeholder="Cohort"
               required
             />
-            <button type="submit" className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base">
+            <button
+              type="submit"
+              className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"
+            >
               Register Student
             </button>
           </form>

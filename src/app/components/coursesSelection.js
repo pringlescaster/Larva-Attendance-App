@@ -3,6 +3,7 @@ import dropdownArrow from "../../../public/assets/dropdownArrow.svg";
 import Image from "next/image";
 
 function CoursesSelection({ onCourseChange }) {
+  const [students, setStudents] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Select Course");
   const dropdownRef = useRef(null);
