@@ -22,6 +22,7 @@ function Page() {
   const [attendanceStatus, setAttendanceStatus] = useState({});
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const currentPage = "Mark Attendance";
 
   useEffect(() => {
@@ -78,9 +79,10 @@ function Page() {
   };
 
   const filteredStudents = students.filter(student => {
+    const matchesSearchTerm = student.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCourse = selectedCourse ? student.course === selectedCourse : true;
     const matchesCohort = selectedCohort ? student.cohort === selectedCohort : true;
-    return matchesCourse && matchesCohort;
+    return matchesSearchTerm && matchesCourse && matchesCohort;
   });
 
   const getButtonStyles = (status, currentStatus) => {
@@ -143,6 +145,8 @@ function Page() {
                   className="bg-transparent outline-none h-full w-full text-[#666666] font-base"
                   type="text"
                   placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <Image src={filterIcon} alt="Filter Icon" />
@@ -195,6 +199,16 @@ function Page() {
       {/* Mobile View - Content */}
       <div className="flex md:hidden flex-col px-4 gap-y-4">
         <h1 className="text-[#1a1a1a] text-center font-semibold">Mark Attendance</h1>
+        <div className="flex gap-x-3 rounded-md bg-[#ffffff] pl-6 py-4 w-full border-[1px] border-[#e9e9e9]">
+                <Image src={searchIcon} alt="Search Icon" />
+                <input
+                  className="bg-transparent outline-none h-full w-full text-[#666666] font-base"
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
         <CalendarSelection onDateChange={handleDateChange} />
         <CoursesSelection onCourseChange={setSelectedCourse} />
         <CohortSelection onCohortChange={setSelectedCohort} />

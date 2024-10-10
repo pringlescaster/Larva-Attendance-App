@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.status === 200) {
         setUser(response.data.user);  // Store user data in state
-        localStorage.setItem('token', response.data.token); // Save JWT token to local storage
+        localStorage.setItem('token', response.data.accessToken); // Save JWT token to local storage
         setError(null); // Clear any previous errors
       }
     } catch (error) {
@@ -32,6 +32,44 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Function to change the user's password
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      const token = localStorage.getItem('token'); // Get JWT token from local storage
+  
+      if (!token) {
+        throw new Error("No authentication token found. Please log in again.");
+      }
+  
+      console.log("Attempting password change with token:", token);
+  
+      // Make the request to your backend server to change the password
+      const response = await axios.put(
+        `http://localhost:2000/api/v1/tutor/password`, 
+        {
+          currentpassword: currentPassword,
+          newpassword: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token for authorization
+          },
+        }
+      );
+  
+      console.log("Password change response:", response);
+  
+      if (response.status === 200) {
+        alert("Password updated successfully.");
+        setError(null); // Clear any errors
+      }
+    } catch (error) {
+      console.error("Password change failed:", error.response?.data || error.message);
+      setError("Password change failed. Please try again.");
+      throw error; // This will allow error handling in the component
+    }
+  };
+  
   // Function to handle logout
   const logout = async () => {
     try {
@@ -48,6 +86,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const token = localStorage.getItem('token'); // Get JWT token from local storage
+if (token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+} else {
+    delete axios.defaults.headers.common['Authorization'];
+}
+
+
   // Function to load user from local storage (if using JWT)
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -61,6 +107,7 @@ export const AuthProvider = ({ children }) => {
     user,
     login,
     logout,
+    changePassword, 
     loading,
     error,
   };

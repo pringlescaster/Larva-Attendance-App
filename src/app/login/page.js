@@ -23,25 +23,25 @@ export default function Login() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const newErrors = validateForm();
-  
-  if (Object.keys(newErrors).length === 0) {
-    setIsLoading(true); // Set loading state to true
-    try {
-      await login(formData.email, formData.password);
-      router.push("/dashboard/markattendance");
-    } catch (error) {
-      setFormError("Login failed. Please check your credentials.");
-    } finally {
-      setIsLoading(false); // Reset loading state
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
+
+    if (Object.keys(newErrors).length === 0) {
+      setIsLoading(true); // Set loading state to true
+      try {
+        await login(formData.email, formData.password);
+        router.push("/dashboard/markattendance");
+      } catch (error) {
+        setFormError("Login failed. Please check your credentials.");
+      } finally {
+        setIsLoading(false); // Reset loading state
+      }
+    } else {
+      setErrors(newErrors);
+      setFormError("Please fill in all required fields.");
     }
-  } else {
-    setErrors(newErrors);
-    setFormError("Please fill in all required fields.");
-  }
-};
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -88,13 +88,13 @@ const handleSubmit = async (e) => {
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
           <div className="grid gap-y-4">
-          <button
-  className="mt-10 bg-[#F39B3B] text-white font-semibold text-[16px] px-4 py-[14px] w-full rounded-lg"
-  type="submit"
-  disabled={isLoading} // Disable when loading
->
-  {isLoading ? "Logging In..." : "Log In as Tutor"}
-</button>
+            <button
+              className="mt-10 bg-[#F39B3B] text-white font-semibold text-[16px] px-4 py-[14px] w-full rounded-lg"
+              type="submit"
+              disabled={isLoading} // Disable when loading
+            >
+              {isLoading ? "Logging In..." : "Log In as Tutor"}
+            </button>
 
             <button
               className="bg-[#1E1206] text-white font-semibold text-[16px] px-4 py-[14px] w-full rounded-lg"
