@@ -32,6 +32,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  //function to update user's profile
+
+  const updateProfile = async (name, email, course) => {
+    try {
+      const token = localStorage.getItem('token');
+      if(!token){
+        throw new Error("No authentication token found. Please log in again");
+      }
+      const response = await axios.put(
+        `http://localhost:2000/api/v1/tutor/profile`,
+        {
+          name,
+          email,
+          course,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the token for authorization
+          },
+        }
+      )
+      
+      if (response.status === 200) {
+        alert("Profile updated successfully.");
+        setError(null); // Clear any errors
+      }
+    } 
+    catch (error) {
+      console.error("Profile change failed:", error.response?.data || error.message);
+      setError("Profile change failed. Please try again.");
+      throw error; // This will allow error handling in the component
+    }
+  }
+
   // Function to change the user's password
   const changePassword = async (currentPassword, newPassword) => {
     try {
@@ -41,7 +75,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("No authentication token found. Please log in again.");
       }
   
-      console.log("Attempting password change with token:", token);
+      // console.log("Attempting password change with token:", token);
   
       // Make the request to your backend server to change the password
       const response = await axios.put(
@@ -57,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         }
       );
   
-      console.log("Password change response:", response);
+      // console.log("Password change response:", response);
   
       if (response.status === 200) {
         alert("Password updated successfully.");
@@ -108,6 +142,7 @@ if (token) {
     login,
     logout,
     changePassword, 
+    updateProfile,
     loading,
     error,
   };
