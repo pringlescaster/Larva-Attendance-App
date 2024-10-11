@@ -1,4 +1,4 @@
-"use client";
+"use client"; 
 
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
@@ -32,67 +32,69 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  //function to update user's profile
-
+  // Function to update user's profile
   const updateProfile = async (name, email, course) => {
     try {
       const token = localStorage.getItem('token');
-      if(!token){
+      if (!token) {
         throw new Error("No authentication token found. Please log in again");
       }
       const response = await axios.put(
-        `http://localhost:2000/api/v1/tutor/profile`,
-        {
-          name,
-          email,
-          course,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token for authorization
-          },
-        }
-      )
-      
+        'http://localhost:2000/api/v1/tutor/profile',
+        { name, email, course },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
       if (response.status === 200) {
+        setUser({ ...user, name, email, course }); 
         alert("Profile updated successfully.");
         setError(null); // Clear any errors
       }
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Profile change failed:", error.response?.data || error.message);
       setError("Profile change failed. Please try again.");
       throw error; // This will allow error handling in the component
     }
-  }
+  };
+
+  // Function to load user profile
+  const loadProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found.");
+      }
+
+      const response = await axios.get("http://localhost:2000/api/v1/tutor/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log('Profile response:', response.data); // Check the response data
+
+      if (response.status === 200) {
+        console.log('Loading profile for user:', response.data); // Log the entire user object
+        setUser(response.data); // Set user data directly from response
+      }
+    } catch (error) {
+      console.error("Failed to load profile:", error.response?.data || error.message);
+      setError("Failed to load profile. Please try again.");
+    }
+  };
 
   // Function to change the user's password
   const changePassword = async (currentPassword, newPassword) => {
     try {
-      const token = localStorage.getItem('token'); // Get JWT token from local storage
-  
+      const token = localStorage.getItem('token');
       if (!token) {
         throw new Error("No authentication token found. Please log in again.");
       }
-  
-      // console.log("Attempting password change with token:", token);
-  
-      // Make the request to your backend server to change the password
+
       const response = await axios.put(
-        `http://localhost:2000/api/v1/tutor/password`, 
-        {
-          currentpassword: currentPassword,
-          newpassword: newPassword,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token for authorization
-          },
-        }
+        'http://localhost:2000/api/v1/tutor/password', 
+        { currentpassword: currentPassword, newpassword: newPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-  
-      // console.log("Password change response:", response);
-  
+
       if (response.status === 200) {
         alert("Password updated successfully.");
         setError(null); // Clear any errors
@@ -103,7 +105,7 @@ export const AuthProvider = ({ children }) => {
       throw error; // This will allow error handling in the component
     }
   };
-  
+
   // Function to handle logout
   const logout = async () => {
     try {
@@ -120,19 +122,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const token = localStorage.getItem('token'); // Get JWT token from local storage
-if (token) {
+  // Set Axios default headers for authorization
+  const token = localStorage.getItem('token');
+  if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-} else {
+  } else {
     delete axios.defaults.headers.common['Authorization'];
-}
+  }
 
-
-  // Function to load user from local storage (if using JWT)
+  // Load user from local storage (if using JWT)
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setUser({ token }); // Set user state based on token
+      setUser({ token });
+      loadProfile(); // Set user state based on token
     }
     setLoading(false);
   }, []);
@@ -143,6 +146,7 @@ if (token) {
     logout,
     changePassword, 
     updateProfile,
+    loadProfile,
     loading,
     error,
   };
