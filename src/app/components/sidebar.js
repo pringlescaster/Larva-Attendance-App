@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import larvaLogo from "../../../public/assets/larvaLogo.svg";
 import logoIcon from "../../../public/assets/logoutIcon.svg";
 import profileImage from "../../../public/assets/profileImage.svg";
 import closeSideBar from "../../../public/assets/closeSideBar.svg";
+import Avatar from "./avatar";
+import { AuthContext } from "../../../context/authContext";
 
 function Sidebar({ closeSidebar }) {
   const [selectedLink, setSelectedLink] = useState("");
+  const { user, logout } = useContext(AuthContext); // Include logout from context
 
   useEffect(() => {
     setSelectedLink(window.location.pathname);
   }, []);
 
-  //In your sidebar code, you're using window.location.pathname to check the current route. If the route matches a specific link, you change the text color to indicate that the user is on that page. For example, if you're on the "Mark Attendance" page, the text for that link will change color to show that it's the active link.
+  const handleLogout = async () => {
+    await logout(); 
+    window.location.href = '/';
+  };
 
   return (
     <>
@@ -63,7 +69,7 @@ function Sidebar({ closeSidebar }) {
             </span>
           </Link>
         </div>
-        <div className="flex gap-x-2 text-[#222222] text-base font-semibold mb-4">
+        <div className="flex gap-x-2 text-[#222222] text-base font-semibold mb-4" onClick={handleLogout}> {/* Attach logout here */}
           <Image src={logoIcon} alt="Logout Icon" />
           <h1 className="font-semibold cursor-pointer">Log Out</h1>
         </div>
@@ -72,10 +78,10 @@ function Sidebar({ closeSidebar }) {
       <aside className="px-4 md:hidden py-8 h-screen flex flex-col justify-between w-[80%] lg:hidden overflow-y-auto">
         <div className="flex justify-between items-start mb-4">
           <div className="flex gap-x-[8px]">
-            <Image className="w-12" src={profileImage} alt="Profile Image" />
+            <Avatar name={user?.name || 'Anonymous'} />
             <div className="grid gap-y-[2px]">
-              <h1 className="text-[#333333] text-base font-semibold text-left">Ayantoye David</h1>
-              <h2 className="text-[#666666] text-sm font-medium text-left">Web Development</h2>
+              <h1 className="text-[#333333] text-base font-semibold text-left">{user?.name || 'Anonymous'}</h1>
+              <h2 className="text-[#666666] text-sm font-medium text-left">{user?.course || 'N/A'}</h2>
             </div>
           </div>
           <Image
@@ -129,7 +135,7 @@ function Sidebar({ closeSidebar }) {
           </Link>
         </div>
 
-        <div className="mb-48 flex gap-x-2 text-[#222222] text-sm font-semibold">
+        <div className="mb-48 flex gap-x-2 text-[#222222] text-sm font-semibold" onClick={handleLogout}> {/* Attach logout here */}
           <Image src={logoIcon} alt="Logout Icon" />
           <h1 className="font-semibold cursor-pointer">Log Out</h1>
         </div>

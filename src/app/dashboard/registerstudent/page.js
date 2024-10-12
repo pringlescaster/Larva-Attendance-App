@@ -32,7 +32,7 @@ function Page() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       setMessage("Check your internet connection");
