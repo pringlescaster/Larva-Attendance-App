@@ -138,7 +138,7 @@ function Page() {
         <Sidebar currentPage={currentPage} />
         <div className="flex-grow overflow-x-hidden">
           <Navbar />
-          <div className="py-[20px] px-8 gap-y-4 flex flex-col">
+          <div className="py-[20px]  px-8 gap-y-4 flex flex-col">
             <h1 className="text-[#1a1a1a] text-center font-semibold">Mark Attendance</h1>
             {error && <p className="text-red-500">{error}</p>}
         
