@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   // Function to handle login
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:2000/api/v1/tutor/login', {
+      const response = await axios.post('https://larva-attendance-app-server.vercel.app/api/v1/tutor/login', {
         email,
         password,
       });
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("No authentication token found. Please log in again");
       }
       const response = await axios.put(
-        'http://localhost:2000/api/v1/tutor/profile',
+        'https://larva-attendance-app-server.vercel.app/api/v1/tutor/profile',
         { name, email, course },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("No authentication token found.");
       }
 
-      const response = await axios.get("http://localhost:2000/api/v1/tutor/profile", {
+      const response = await axios.get('https://larva-attendance-app-server.vercel.app/api/v1/tutor/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await axios.put(
-        'http://localhost:2000/api/v1/tutor/password', 
+        'https://larva-attendance-app-server.vercel.app/api/v1/tutor/password', 
         { currentpassword: currentPassword, newpassword: newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
   // Function to handle logout
   const logout = async () => {
     try {
-      const response = await axios.post('http://localhost:2000/api/v1/tutor/logout');
+      const response = await axios.post("https://larva-attendance-app-server.vercel.app/api/v1/tutor/logout");
 
       if (response.status === 200) {
         setUser(null); // Clear user state
@@ -123,12 +123,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Set Axios default headers for authorization
-  const token = localStorage.getItem('token');
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete axios.defaults.headers.common['Authorization'];
-  }
+  // const token = localStorage.getItem('token');
+  // if (token) {
+  //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  // } else {
+  //   delete axios.defaults.headers.common['Authorization'];
+  // }
 
   // Load user from local storage (if using JWT)
   useEffect(() => {

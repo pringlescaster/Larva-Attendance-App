@@ -41,7 +41,7 @@ function Page() {
 
   try {
     const response = await axios.post(
-      "http://localhost:2000/api/v1/student/register",
+      "https://larva-attendance-app-server.vercel.app/api/v1/student/register",
       studentData,
       {
         headers: {

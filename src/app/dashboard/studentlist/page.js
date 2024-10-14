@@ -27,7 +27,7 @@ function Page() {
       if (user) {
         try {
           const response = await axios.get(
-            "http://localhost:2000/api/v1/students",
+            "https://larva-attendance-app-server.vercel.app/api/v1/students",
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

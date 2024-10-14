@@ -32,7 +32,7 @@ function Page() {
     const fetchStudents = async () => {
       if (user) {
         try {
-          const response = await axios.get("http://localhost:2000/api/v1/students", {
+          const response = await axios.get("https://larva-attendance-app-server.vercel.app/api/v1/students", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
@@ -55,7 +55,7 @@ function Page() {
 
   const markAttendance = async (studentId, status) => {
     try {
-      await axios.post("http://localhost:2000/api/v1/attendance", {
+      await axios.post("https://larva-attendance-app-server.vercel.app/api/v1/attendance", {
         date: selectedDate,
         status: status,
         studentId: studentId,
