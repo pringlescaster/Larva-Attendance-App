@@ -62,8 +62,12 @@ export default function Login() {
         <form className="w-full" onSubmit={handleSubmit}>
           {formError && <p className="text-red-500 relative bottom-4 text-sm">{formError}</p>}
           <div className="grid gap-y-4">
-            <div className={`w-full flex items-center gap-x-3 px-4 py-[12px] border-2 rounded-[10px] bg-[#f9f9f9] border-[#D3D3D3] hover:border-[#F39B3B] ${errors.email ? "border-red-500" : ""}`}>
-              <Image className="w-[18px]" src={emailLogo} alt="Email Icon" />
+            <div
+              className={`w-full flex items-center gap-x-3 px-4 py-[12px] border-2 rounded-[10px] bg-[#f9f9f9] border-[#D3D3D3] hover:border-[#F39B3B] ${
+                errors.email ? "border-red-500" : ""
+              }`}
+            >
+              <Image className="w-[16px]" src={emailLogo} alt="Email Icon" />
               <input
                 className="outline-none bg-transparent text-[#222222] text-[16px] flex-1"
                 type="email"
@@ -71,11 +75,16 @@ export default function Login() {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={isLoading} // Disable input when loading
               />
             </div>
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-            <div className={`w-full flex items-center gap-x-3 px-4 py-[12px] border-2 rounded-[10px] bg-[#f9f9f9] border-[#D3D3D3] hover:border-[#F39B3B] ${errors.password ? "border-red-500" : ""}`}>
-              <Image className="w-[16px]" src={passwordIcon} alt="Password Icon" />
+            <div
+              className={`w-full flex items-center gap-x-3 px-4 py-[12px] border-2 rounded-[10px] bg-[#f9f9f9] border-[#D3D3D3] hover:border-[#F39B3B] ${
+                errors.password ? "border-red-500" : ""
+              }`}
+            >
+              <Image className="w-[14px]" src={passwordIcon} alt="Password Icon" />
               <input
                 className="outline-none bg-transparent text-[#222222] text-[16px] flex-1"
                 type="password"
@@ -83,6 +92,7 @@ export default function Login() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={isLoading} // Disable input when loading
               />
             </div>
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
@@ -91,7 +101,7 @@ export default function Login() {
             <button
               className="mt-10 bg-[#F39B3B] text-white font-semibold text-[16px] px-4 py-[14px] w-full rounded-lg"
               type="submit"
-              disabled={isLoading} // Disable when loading
+              disabled={isLoading} // Disable button when loading
             >
               {isLoading ? "Logging In..." : "Log In as Tutor"}
             </button>
@@ -100,6 +110,7 @@ export default function Login() {
               className="bg-[#1E1206] text-white font-semibold text-[16px] px-4 py-[14px] w-full rounded-lg"
               type="button"
               onClick={() => router.push("/admin-login")}
+              disabled={isLoading} // Optionally disable other buttons
             >
               Log In as Super Admin
             </button>
@@ -107,7 +118,7 @@ export default function Login() {
         </form>
       </div>
       <div className="w-full hidden md:hidden lg:block">
-        <Image src={loginImage} alt="Login Image" />
+        <Image className="" src={loginImage} alt="Login Image" />
       </div>
     </div>
   );

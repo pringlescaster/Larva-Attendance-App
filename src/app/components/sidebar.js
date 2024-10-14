@@ -1,3 +1,4 @@
+// Sidebar Component
 import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,24 +11,25 @@ import { AuthContext } from "../../../context/authContext";
 
 function Sidebar({ closeSidebar }) {
   const [selectedLink, setSelectedLink] = useState("");
-  const { user, logout } = useContext(AuthContext); // Include logout from context
+  const { user, logout } = useContext(AuthContext); // Accessing logout from context
 
   useEffect(() => {
     setSelectedLink(window.location.pathname);
   }, []);
 
   const handleLogout = async () => {
-    await logout(); 
+    await logout();
     window.location.href = '/';
   };
 
   return (
     <>
-      <aside className="px-4 py-6 h-screen md:flex lg:flex hidden flex-col justify-between md:w-[40%] lg:w-[20%] border-r-2 border-r-[#e6e6e6] overflow-y-auto">
+      {/* Desktop Sidebar */}
+      <aside className=" bg-white px-4 py-6 h-screen md:flex lg:flex hidden flex-col justify-between md:w-[30%] lg:w-[20%] border-r-2 border-r-[#e6e6e6] overflow-y-auto">
         <div className="mb-6">
           <Image className="w-24" src={larvaLogo} alt="Larva Logo" />
         </div>
-        <div className="text-[#222222] font-semibold text-base flex flex-col gap-y-6">
+        <div className="text-[#222222] font-semibold text-sm flex flex-col gap-y-6">
           <Link href="/dashboard/markattendance">
             <span
               className={`cursor-pointer ${
@@ -69,12 +71,13 @@ function Sidebar({ closeSidebar }) {
             </span>
           </Link>
         </div>
-        <div className="flex gap-x-2 text-[#222222] text-base font-semibold mb-4" onClick={handleLogout}> {/* Attach logout here */}
+        <div className="flex gap-x-2 text-[#222222] text-base font-semibold mb-4" onClick={handleLogout}>
           <Image src={logoIcon} alt="Logout Icon" />
-          <h1 className="font-semibold cursor-pointer">Log Out</h1>
+          <h1 className="font-semibold text-sm cursor-pointer">Log Out</h1>
         </div>
       </aside>
 
+      {/* Mobile Sidebar */}
       <aside className="px-4 md:hidden py-8 h-screen flex flex-col justify-between w-[80%] lg:hidden overflow-y-auto">
         <div className="flex justify-between items-start mb-4">
           <div className="flex gap-x-[8px]">
@@ -135,7 +138,7 @@ function Sidebar({ closeSidebar }) {
           </Link>
         </div>
 
-        <div className="mb-48 flex gap-x-2 text-[#222222] text-sm font-semibold" onClick={handleLogout}> {/* Attach logout here */}
+        <div className="mb-48 flex gap-x-2 text-[#222222] text-sm font-semibold" onClick={handleLogout}>
           <Image src={logoIcon} alt="Logout Icon" />
           <h1 className="font-semibold cursor-pointer">Log Out</h1>
         </div>

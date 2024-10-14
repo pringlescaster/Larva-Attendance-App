@@ -87,16 +87,16 @@ function Page() {
         <Sidebar currentPage={currentPage} />
         <div className="flex-grow overflow-x-hidden">
           <Navbar />
-          <div className="py-5 border-b-2 border-[#e9e9e9] px-8 bg-[#FAF9F9]">
+          <div className="py-5 border-b-2 flex-col border-[#e9e9e9] px-8 bg-[#FAF9F9]">
             <h1 className="text-[#1a1a1a] text-center font-semibold">
               Register Students
             </h1>
           </div>
-          <div className="bg-[#FAF9F9]">
+          <div className="">
             <div className="py-8 gap-y-4 px-8 flex flex-col items-center max-w-lg mx-auto">
               <div className="flex flex-col gap-y-2">
                 <Image
-                  className="w-[120px]"
+                  className="w-[90px]"
                   src={registerProfile}
                   alt="Register Profile"
                 />
@@ -104,7 +104,7 @@ function Page() {
                   Add Photo
                 </button>
               </div>
-              <form onSubmit={handleSubmit} className="w-full space-y-4">
+              <form onSubmit={handleSubmit} className="w-full space-y-4 text-sm">
                 <input
                   className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                   type="text"
@@ -114,6 +114,17 @@ function Page() {
                   required
                   placeholder="Name"
                 />
+                 <input
+                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                  type="text"
+                  name="course"
+                  value={studentData.course}
+                  onChange={handleChange}
+                  placeholder="Course"
+                  required
+                />
+
+                <div className="flex gap-x-[16px]">
                 <input
                   className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                   type="number"
@@ -123,15 +134,7 @@ function Page() {
                   placeholder="Student Number"
                   required
                 />
-                <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-                  type="text"
-                  name="course"
-                  value={studentData.course}
-                  onChange={handleChange}
-                  placeholder="Course"
-                  required
-                />
+               
                 <input
                   className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                   type="text"
@@ -141,6 +144,8 @@ function Page() {
                   placeholder="Cohort"
                   required
                 />
+                </div>
+                
                 <button
                   type="submit"
                   className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"

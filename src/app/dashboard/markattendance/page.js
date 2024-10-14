@@ -12,6 +12,9 @@ import CohortSelection from "@/app/components/cohortSelection.js";
 import CalendarSelection from "@/app/components/calenderSelection.js";
 import axios from "axios";
 import Avatar from "@/app/components/avatar.js";
+import present from "../../../../public/assets/PRESENT.svg";
+import absent from "../../../../public/assets/absent.svg";
+import left from "../../../../public/assets/left.svg"
 
 function Page() {
   const { user, logout, error } = useContext(AuthContext);
@@ -89,13 +92,13 @@ function Page() {
     if (status === currentStatus) {
       switch (status) {
         case "present":
-          return "bg-[#4caf50] text-white";
+          return "bg-[#4CAF50] text-whit";
         case "absent":
-          return "bg-[#f44336] text-white";
+          return "bg-[#F44336] text-white";
         case "left":
-          return "bg-[#ff9800] text-white";
+          return "bg-[#FF9800] text-white";
         default:
-          return "bg-[#efefef] text-[#222222]";
+          return "bg-[#F0F0F0] text-[#222222]";
       }
     }
     return "bg-[#efefef] text-[#222222]";
@@ -135,51 +138,62 @@ function Page() {
         <Sidebar currentPage={currentPage} />
         <div className="flex-grow overflow-x-hidden">
           <Navbar />
-          <div className="py-[20px] px-8 bg-[#FAF9F9] gap-y-4 grid">
+          <div className="py-[20px] px-8 gap-y-4 flex flex-col">
             <h1 className="text-[#1a1a1a] text-center font-semibold">Mark Attendance</h1>
             {error && <p className="text-red-500">{error}</p>}
-            <div className="flex justify-between">
+        
               <div className="flex gap-x-3 rounded-md bg-[#ffffff] pl-6 py-4 w-[90%] border-[1px] border-[#e9e9e9]">
                 <Image src={searchIcon} alt="Search Icon" />
                 <input
-                  className="bg-transparent outline-none h-full w-full text-[#666666] font-base"
+                  className="bg-transparent outline-none h-full w-full text-[#666666] text-sm font-base"
                   type="text"
                   placeholder="Search"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Image src={filterIcon} alt="Filter Icon" />
-            </div>
-            <div className="flex flex-col sm:flex-row sm:flex-wrap justify-start items-start gap-4">
-              <CalendarSelection onDateChange={handleDateChange} />
+              
+            <div className="flex flex-col justify-between sm:flex-row sm:flex-wrap items-center">
+             <div className="flex gap-x-8 justify-end items-start">
+             <CalendarSelection onDateChange={handleDateChange} />
               <CoursesSelection onCourseChange={setSelectedCourse} />
               <CohortSelection onCohortChange={setSelectedCohort} />
+             </div>
+              <div className="flex gap-x-8">
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={present} />
+                <p className="text-[#333333] font-medium text-sm">P- Present</p></div>
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={absent} />
+                <p className="text-[#333333] font-medium text-sm">A- Absent</p></div>
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={left}  />
+                <p className="text-[#333333] font-medium text-sm">L- Left</p></div>
+              </div>
             </div>
 
             {/* Display Students List */}
-            <div className="mt-4">
-              <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            
+            <div className="mt-4 py-3">
+              <div className="grid gap-3 md:gap-x-6 gap-x-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
                 {filteredStudents.length > 0 ? (
                   filteredStudents.map((student) => (
                     <div key={student._id} className="bg-white rounded-[20px] shadow flex flex-col justify-start items-center gap-2 p-4">
                       <Avatar name={student.name} />
                       <p className="text-[#222222] mt-1 text-sm font-medium">{student.name}</p>
                       <div className="gap-x-2 flex mt-2">
+                      <button
+  className={`text-center rounded-[8px] font-medium px-[12px] py-1 text-[14px] ${getButtonStyles("present", attendanceStatus[student._id])}`}
+  onClick={() => markAttendance(student._id, "present")}
+>
+  P
+</button>
+
                         <button
-                          className={`text-center rounded-[8px] px-[12px] py-1 ${getButtonStyles("present", attendanceStatus[student._id])}`}
-                          onClick={() => markAttendance(student._id, "present")}
-                        >
-                          P
-                        </button>
-                        <button
-                          className={`text-center rounded-[8px] px-[12px] py-1 ${getButtonStyles("absent", attendanceStatus[student._id])}`}
+                          className={`text-center rounded-[8px]  font-medium px-[12px] py-1 text-[14px] ${getButtonStyles("absent", attendanceStatus[student._id])}`}
                           onClick={() => markAttendance(student._id, "absent")}
                         >
                           A
                         </button>
                         <button
-                          className={`text-center rounded-[8px] px-[12px] py-1 ${getButtonStyles("left", attendanceStatus[student._id])}`}
+                          className={`text-center rounded-[8px] px-[12px] py-1 font-medium text-[14px] ${getButtonStyles("left", attendanceStatus[student._id])}`}
                           onClick={() => markAttendance(student._id, "left")}
                         >
                           L
@@ -209,11 +223,22 @@ function Page() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-        <CalendarSelection onDateChange={handleDateChange} />
+              <div className="flex flex-wrap gap-3">
+              <CalendarSelection onDateChange={handleDateChange} />
         <CoursesSelection onCourseChange={setSelectedCourse} />
         <CohortSelection onCohortChange={setSelectedCohort} />
+        <div className="flex gap-x-8">
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={present} />
+                <p className="text-[#333333] font-medium text-sm">P- Present</p></div>
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={absent} />
+                <p className="text-[#333333] font-medium text-sm">A- Absent</p></div>
+                <div className="flex justify-center items-center gap-x-2"><Image className="w-2" src={left}  />
+                <p className="text-[#333333] font-medium text-sm">L- Left</p></div>
+              </div>
+              </div>
+      
 
-        <div className="grid gap-3">
+        <div className="grid py-3 grid-cols-2 gap-3">
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student) => (
               <div key={student._id} className="bg-white rounded-[20px] shadow flex flex-col justify-start items-center gap-2 p-4">

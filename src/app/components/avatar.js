@@ -1,6 +1,7 @@
 import React from 'react';
 
-function Avatar({ name }) {
+function Avatar({ name, size = 12 }) { // Add size prop with a default value of 12 (for 48px size)
+
   // Get the first letter of the name, convert to uppercase, or return empty string if no name is provided
   const firstLetter = name ? name.charAt(0).toUpperCase() : '';
 
@@ -19,8 +20,13 @@ function Avatar({ name }) {
 
   return (
     <div
-      className='flex items-center justify-center w-12 h-12 rounded-full text-xl font-bold text-white'
-      style={{ backgroundColor: getRandomColor(name) }} // Set background color based on name
+      className='flex items-center justify-center rounded-full font-bold text-white'
+      style={{
+        width: `${size * 4}px`, // Adjust width based on the size prop
+        height: `${size * 4}px`, // Adjust height based on the size prop
+        fontSize: `${size * 1.5}px`, // Adjust font size based on the size prop
+        backgroundColor: getRandomColor(name), // Set background color based on name
+      }}
     >
       {firstLetter} {/* Display the first letter */}
     </div>

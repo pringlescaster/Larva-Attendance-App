@@ -56,7 +56,7 @@ function ChangePassword() {
       {formError && <p className="text-red-500 relative bottom-4 text-sm">{formError}</p>}
       
       <input
-        className="w-full text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+        className="w-full text-sm text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
         type="password"
         name="oldPassword"
         placeholder="Current Password"
@@ -66,7 +66,7 @@ function ChangePassword() {
       {errors.oldPassword && <p className="text-red-500 text-sm">{errors.oldPassword}</p>}
 
       <input
-        className="w-full text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+        className="w-full text-sm text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
         type="password"
         name="newPassword"
         placeholder="New Password"
@@ -76,7 +76,7 @@ function ChangePassword() {
       {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword}</p>}
 
       <input
-        className="w-full text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+        className="w-full text-sm text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
         type="password"
         name="confirmPassword"
         placeholder="Confirm Password"
@@ -86,7 +86,7 @@ function ChangePassword() {
       {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
 
       <button
-        className="bg-[#F39B3B] mt-6 w-full text-white font-semibold rounded-lg px-4 py-2"
+        className="bg-[#F39B3B] mt-6 w-full font-medium text-white text-sm rounded-lg px-4 py-3"
         type="submit"
         disabled={isLoading} // Disable when loading
       >

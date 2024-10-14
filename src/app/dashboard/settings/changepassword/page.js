@@ -65,11 +65,11 @@ function Page() {
     <>
       {/* Desktop View */}
       <div className="w-[60%] hidden py-8 gap-y-6 px-8 md:flex flex-col items-center">
-        <form className="px-6 password-sm text-sm w-full text-[#333333] grid gap-y-4" onSubmit={handleSubmit}>
+        <form className="px-6  text-sm w-full text-[#333333] grid gap-y-4" onSubmit={handleSubmit}>
           {formError && <p className="text-red-500 text-sm">{formError}</p>}
           
           <input
-            className="w-full text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+            className="w-full text-sm text-[#333333] rounded-lg outline-[#F39B3B] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
             type="password"
             name="oldPassword"
             placeholder="Current Password"

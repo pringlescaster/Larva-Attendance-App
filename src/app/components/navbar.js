@@ -16,7 +16,7 @@ function Navbar({ openSidebar }) {
 
         {/* User Profile */}
         <div className="flex gap-x-[8px] items-center">
-          <Avatar name={user?.name || 'Anonymous'} /> {/* Use optional chaining */}
+          <Avatar name={user?.name || 'Anonymous'} size={8} /> {/* Use optional chaining */}
           <div className="flex flex-col gap-y-[2px] justify-center">
             <h1 className="text-[#333333] text-[14px] font-semibold text-left">
               {user?.name || 'Anonymous'}
