@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
@@ -21,8 +21,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.status === 200) {
-        setUser(response.data.user);  // Store user data in state
         localStorage.setItem('token', response.data.accessToken); // Save JWT token to local storage
+        setUser(response.data.user); // Store user data in state
+        await loadProfile(); // Fetch user profile immediately after login
         setError(null); // Clear any previous errors
       }
     } catch (error) {
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (response.status === 200) {
-        setUser({ ...user, name, email, course }); 
+        setUser({ ...user, name, email, course });
         alert("Profile updated successfully.");
         setError(null); // Clear any errors
       }
@@ -90,7 +91,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await axios.put(
-        'https://larva-attendance-app-server.vercel.app/api/v1/tutor/password', 
+        'https://larva-attendance-app-server.vercel.app/api/v1/tutor/password',
         { currentpassword: currentPassword, newpassword: newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -122,29 +123,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Set Axios default headers for authorization
-  // const token = localStorage.getItem('token');
-  // if (token) {
-  //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  // } else {
-  //   delete axios.defaults.headers.common['Authorization'];
-  // }
-
   // Load user from local storage (if using JWT)
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setUser({ token });
       loadProfile(); // Set user state based on token
+    } else {
+      setLoading(false); // No token, just set loading to false
     }
-    setLoading(false);
   }, []);
 
   const value = {
     user,
     login,
     logout,
-    changePassword, 
+    changePassword,
     updateProfile,
     loadProfile,
     loading,
