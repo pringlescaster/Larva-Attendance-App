@@ -96,8 +96,7 @@ function EditProfile() {
           value={formData.email}
           onChange={handleInputChange}
         />
-        
-
+       
         <input
           className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
           type="text"
@@ -106,7 +105,7 @@ function EditProfile() {
           value={formData.course}
           onChange={handleInputChange}
         />
-  
+        
 
         <button
           type="submit"
