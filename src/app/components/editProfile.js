@@ -86,7 +86,7 @@ function EditProfile() {
           value={formData.name}
           onChange={handleInputChange}
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+      
 
         <input
           className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
@@ -96,7 +96,7 @@ function EditProfile() {
           value={formData.email}
           onChange={handleInputChange}
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        
 
         <input
           className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
@@ -106,7 +106,7 @@ function EditProfile() {
           value={formData.course}
           onChange={handleInputChange}
         />
-        {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
+  
 
         <button
           type="submit"

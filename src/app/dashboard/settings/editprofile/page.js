@@ -5,11 +5,14 @@ import Image from 'next/image';
 import profilee from '../../../../../public/assets/profilee.svg';
 import Navbar from '@/app/components/navbar';
 import Sidebar from '@/app/components/sidebar';
+import Success from '@/app/components/success';
+import loading from "../../../../../public/assets/rolling.gif";
 import { AuthContext } from '../../../../../context/authContext';
 
 function Page() {
   const { user, updateProfile } = useContext(AuthContext);
   const [showSideBar, setShowSideBar] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,7 +21,7 @@ function Page() {
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingState, setLoadingState] = useState(false); // Only one loading state
   const router = useRouter();
 
   // Pre-fill the form with the current user's details
@@ -53,17 +56,23 @@ function Page() {
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length === 0) {
-      setIsLoading(true);
+      setLoadingState(true); // Correct loading state
       setFormError(''); // Reset form error
 
       try {
         await updateProfile(formData.name, formData.email, formData.course);
-        alert('Profile updated successfully');
-        router.push('/dashboard/markattendance'); // Redirect after success
+        setShowSuccessModal(true);
+
+        // Automatically close the success modal after 3 seconds
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          router.push('/dashboard/markattendance'); // Redirect after success
+        }, 3000); // 3 seconds timer
+
       } catch (error) {
         setFormError('Profile update failed. Please try again.');
       } finally {
-        setIsLoading(false);
+        setLoadingState(false); // Ensure loading state is reset
         setIsEditing(false); // Disable edit mode after submission
       }
     } else {
@@ -76,56 +85,69 @@ function Page() {
 
   return (
     <>
+      {/* Success Modal */}
+      {showSuccessModal && <Success message="Profile updated successfully!" />}
+
       {/* Desktop view */}
       <div className="w-[60%] hidden py-8 gap-y-6 px-8 md:flex flex-col items-center">
-        <div className="flex flex-col gap-y-2">
-          <Image className="w-[100px]" src={profilee} alt="Profile" />
-          <button className="text-[#f39b3b] font-semibold">Change Picture</button>
+        <div className="">
+          {loadingState ? ( // Show loading GIF when loading
+            <Image 
+              src={loading} 
+              alt="Loading..." 
+              className="w-16 mx-auto flex justify-center items-center mt-32 h-16"
+            />
+          ) : (
+            <div className="flex flex-col gap-y-2">
+              <Image className="w-[100px]" src={profilee} alt="Profile" />
+              <button className="text-[#f39b3b] font-semibold">Change Picture</button>
+            </div>
+          )}
+
+          <form className="px-6 text-sm w-full grid gap-y-4" onSubmit={handleSubmit}>
+            {formError && <p className="text-red-500 text-sm">{formError}</p>}
+
+            <input
+              className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+
+            <input
+              className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
+            <input
+              className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+              type="text"
+              name="course"
+              placeholder="Course"
+              value={formData.course}
+              onChange={handleInputChange}
+            />
+            {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
+
+            <button
+              type="submit"
+              className={`bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base transition-opacity duration-300 ${
+                isEditing ? 'opacity-100' : 'opacity-65'
+              }`}
+              disabled={loadingState || !isEditing} // Disable button when loading or no edits
+            >
+              {loadingState ? 'Saving...' : 'Save'}
+            </button>
+          </form>
         </div>
-
-        <form className="px-6 text-sm w-full grid gap-y-4" onSubmit={handleSubmit}>
-          {formError && <p className="text-red-500 text-sm">{formError}</p>}
-
-          <input
-            className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleInputChange}
-          />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-
-          <input
-            className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-
-          <input
-            className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-            type="text"
-            name="course"
-            placeholder="Course"
-            value={formData.course}
-            onChange={handleInputChange}
-          />
-          {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
-
-          <button
-            type="submit"
-            className={`bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base transition-opacity duration-300 ${
-              isEditing ? 'opacity-100' : 'opacity-65'
-            }`}
-            disabled={isLoading || !isEditing} // Disable button when loading or no edits
-          >
-            {isLoading ? 'Saving...' : 'Save'}
-          </button>
-        </form>
       </div>
 
       {/* Mobile view */}
@@ -141,7 +163,8 @@ function Page() {
           <Image className="w-[80px] mx-auto" src={profilee} alt="Profile" />
           <button className="text-[#f39b3b] font-semibold">Change Picture</button>
         </div>
-        <div className="px-3 text-sm w-full pt-10 grid gap-y-4">
+        <form className="px-3 text-sm w-full pt-10 grid gap-y-4" onSubmit={handleSubmit}>
+          {formError && <p className="text-red-500 text-sm">{formError}</p>}
           <input
             className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
             type="text"
@@ -171,11 +194,11 @@ function Page() {
             className={`bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base transition-opacity duration-300 ${
               isEditing ? 'opacity-100' : 'opacity-65'
             }`}
-            disabled={isLoading || !isEditing} // Disable button when loading or no edits
+            disabled={loadingState || !isEditing} // Disable button when loading or no edits
           >
-            {isLoading ? 'Saving...' : 'Save'}
+            {loadingState ? 'Saving...' : 'Save'}
           </button>
-        </div>
+        </form>
       </div>
     </>
   );
