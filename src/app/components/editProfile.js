@@ -37,7 +37,7 @@ function EditProfile() {
   // Validate form inputs
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Please enter your name.';
+    if (!formData.name) newErrors.name = 'Please enter your name';
     if (!formData.email) newErrors.email = 'Please enter your email.';
     if (!formData.course) newErrors.course = 'Please enter your course.';
     return newErrors;
