@@ -39,10 +39,10 @@ function Page() {
             }
           );
           setStudents(response.data);
-          setErrorState("false");
+          setErrorState(false);
         } catch (error) {
           console.error("Error fetching students:", error);
-          setErrorState("true");
+          setErrorState(true);
         }
       }
     };

@@ -46,10 +46,10 @@ function Page() {
             initialAttendanceStatus[student._id] = null;
           });
           setAttendanceStatus(initialAttendanceStatus);
-          setErrorState("false");
+          setErrorState(false);
         } catch (error) {
           console.error("Error fetching students:", error);
-          setErrorState("true");
+          setErrorState(true);
         }
       }
     };
