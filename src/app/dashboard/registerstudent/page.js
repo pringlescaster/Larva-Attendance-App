@@ -4,7 +4,6 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../../../context/authContext";
 import Sidebar from "@/app/components/sidebar";
 import Navbar from "@/app/components/navbar";
-import Success from "@/app/components/success";
 import Image from "next/image";
 import registerProfile from "../../../../public/assets/registerProfile.svg";
 import axios from "axios";
@@ -12,7 +11,7 @@ import axios from "axios";
 function Page() {
   const { user, logout, error } = useContext(AuthContext);
   const [showSideBar, setShowSideBar] = useState(false);
-  const [ showSuccessModal, setShowSuccessModal] = useState(false);
+  const [ notification, setNotification] = useState("");
   const [studentData, setStudentData] = useState({
     name: "",
     studentnumber: "",
@@ -58,12 +57,6 @@ function Page() {
         course: "",
         cohort: "",
       });
-
-      setShowSuccessModal(true);
-    setTimeout(() => {
-      setShowSuccessModal(false);
-    }, 3000);
-      
     }
     else { 
       setMessage(response.data.message || " Error registering student");
@@ -165,15 +158,6 @@ function Page() {
           </div>
         </div>
       </div>
-
-      {showSuccessModal && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30">
-          <div className="bg-white p-6 rounded-md shadow-md">
-            <Success />
-          </div>
-        </div>
-      )}
-
 
       {/* Mobile View - Registration Form */}
       <div className="md:hidden flex flex-col px-4 gap-y-4">
