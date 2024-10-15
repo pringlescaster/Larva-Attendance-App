@@ -13,6 +13,7 @@ import CohortSelection from "@/app/components/cohortSelection";
 import CoursesSelection from "@/app/components/coursesSelection";
 import Error from "@/app/components/error";
 import axios from "axios";
+import loading from "../../../../public/assets/rolling.gif";
 
 function Page() {
   const { user, logout, error } = useContext(AuthContext);
@@ -21,13 +22,15 @@ function Page() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [errorState, setErrorState] = useState("false");
+  const [errorState, setErrorState] = useState(false);
+  const [loadingState, setLoadingState] = useState(false)
   const currentPage = "Student Attendance";
 
 
   useEffect(() => {
     const fetchStudents = async () => {
       if (user) {
+        setLoadingState(true);
         try {
           const response = await axios.get(
             "https://larva-attendance-app-server.vercel.app/api/v1/students",
@@ -43,6 +46,9 @@ function Page() {
         } catch (error) {
           console.error("Error fetching students:", error);
           setErrorState(true);
+        }
+        finally{
+          setLoadingState(false);
         }
       }
     };
@@ -108,7 +114,13 @@ function Page() {
               <CohortSelection onCohortChange={setSelectedCohort} />
             </div>
            
+            {loadingState ? (
+               <div className="flex mt-10 justify-center items-center">
+               <Image src={loading} alt="Loading..." width={60} height={60} />
+             </div>
+            ) : (
               <div className="overflow-x-auto rounded-lg mt-4">
+                
               {errorState ? (<Error />) : (
                 <table className="min-w-full bg-white border border-gray-200">
                   <thead>
@@ -135,6 +147,7 @@ function Page() {
                 </table>
                 )}
               </div>
+            )}
           </div>
         </div>
       </div>
@@ -159,6 +172,11 @@ function Page() {
             <CoursesSelection onCourseChange={setSelectedCourse} />
             <CohortSelection onCohortChange={setSelectedCohort} />
           </div>
+          {loadingState ? (
+               <div className="flex mt-10 justify-center items-center">
+               <Image src={loading} alt="Loading..." width={60} height={60} />
+             </div>
+            ) : (
           <div className="overflow-x-auto mt-4">
             {errorState ? (<Error />) : (
             <table className="min-w-full bg-white border border-gray-200">
@@ -181,6 +199,7 @@ function Page() {
             </table>
             )}
           </div>
+            )}
         </div>
       )}
     </>

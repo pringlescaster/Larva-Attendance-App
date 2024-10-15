@@ -16,6 +16,7 @@ import present from "../../../../public/assets/PRESENT.svg";
 import absent from "../../../../public/assets/absent.svg";
 import left from "../../../../public/assets/left.svg"
 import Error from "@/app/components/error.js";
+import loading from "../../../../public/assets/rolling.gif";
 
 function Page() {
   const { user, logout } = useContext(AuthContext);
@@ -27,12 +28,14 @@ function Page() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [errorState, setErrorState] = useState ("false");
+  const [errorState, setErrorState] = useState (false);
+  const [loadingState, setLoadingState] = useState (false);
   const currentPage = "Mark Attendance";
 
   useEffect(() => {
     const fetchStudents = async () => {
       if (user) {
+        setLoadingState(true);
         try {
           const response = await axios.get("https://larva-attendance-app-server.vercel.app/api/v1/students", {
             headers: {
@@ -50,6 +53,9 @@ function Page() {
         } catch (error) {
           console.error("Error fetching students:", error);
           setErrorState(true);
+        }
+        finally {
+          setLoadingState(false);
         }
       }
     };
@@ -138,6 +144,7 @@ function Page() {
       </div>
 
       {/* Desktop View - Sidebar always visible */}
+
       <div className="hidden md:flex">
         <Sidebar currentPage={currentPage} />
         <div className="flex-grow overflow-x-hidden">
@@ -175,7 +182,11 @@ function Page() {
 
             {/* Display Students List */}
             
-            
+            {loadingState ? (
+               <div className="flex mt-10 justify-center items-center">
+               <Image src={loading} alt="Loading..." width={60} height={60} />
+             </div>
+            ) : (
             <div className="mt-4 py-3">
             {errorState ? (<Error />) : (
               <div className="grid gap-3 md:gap-x-6 gap-x-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
@@ -213,7 +224,7 @@ function Page() {
               </div>
                )}
             </div>
-           
+           )}
           </div>
         </div>
       </div>
@@ -245,6 +256,12 @@ function Page() {
               </div>
               </div>
       
+              {loadingState ? (
+               <div className="flex mt-12 justify-center items-center">
+               <Image src={loading} alt="Loading..." width={50} height={50} />
+             </div>
+            ) : (
+      <div>
               {errorState ? (<Error />) : (
         <div className="grid py-3 grid-cols-2 gap-3">
           {filteredStudents.length > 0 ? (
@@ -279,6 +296,8 @@ function Page() {
           )}
         </div>
               )}
+      </div>
+            )}
       </div>
     </>
   );
