@@ -54,7 +54,7 @@ function EditProfile() {
 
       try {
         await updateProfile(formData.name, formData.email, formData.course);
-        alert('Profile updated successfully');
+      
         router.push('/dashboard/markattendance'); // Redirect after success
       } catch (error) {
         setFormError('Profile update failed. Please try again.');
