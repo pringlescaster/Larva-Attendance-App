@@ -11,6 +11,7 @@ import filterIcon from "../../../../public/assets/filterIcn.svg";
 import CalenderSelection from "@/app/components/calenderSelection";
 import CohortSelection from "@/app/components/cohortSelection";
 import CoursesSelection from "@/app/components/coursesSelection";
+import Error from "@/app/components/error";
 import axios from "axios";
 
 function Page() {
@@ -20,7 +21,9 @@ function Page() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorState, setErrorState] = useState("false");
   const currentPage = "Student Attendance";
+
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -36,8 +39,10 @@ function Page() {
             }
           );
           setStudents(response.data);
+          setErrorState("false");
         } catch (error) {
           console.error("Error fetching students:", error);
+          setErrorState("true");
         }
       }
     };
@@ -97,13 +102,14 @@ function Page() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-            <div className="flex flex-col sm:flex-row sm:flex-wrap justify-start gap-x-8 items-start gap-4">
+            <div className="flex justify-start gap-x-8 items-start gap-4">
               
               <CoursesSelection onCourseChange={setSelectedCourse} />
               <CohortSelection onCohortChange={setSelectedCohort} />
             </div>
            
               <div className="overflow-x-auto rounded-lg mt-4">
+              {errorState ? (<Error />) : (
                 <table className="min-w-full bg-white border border-gray-200">
                   <thead>
                     <tr className="text-[#222222] font-medium text-[16px]">
@@ -113,6 +119,7 @@ function Page() {
                     </tr>
                   </thead>
                   <tbody>
+                    
   {filteredStudents.map((student) => (
     <tr className="text-[#333333] text-sm" key={student._id}>
       <td className="border-b px-4 py-2">
@@ -126,6 +133,7 @@ function Page() {
 </tbody>
 
                 </table>
+                )}
               </div>
           </div>
         </div>
@@ -136,25 +144,23 @@ function Page() {
           <h1 className="text-[#1a1a1a] text-center font-semibold">
             Student List
           </h1>
-          <div className="flex justify-between">
-            <div className="flex gap-x-3 rounded-md bg-[#ffffff] pl-6 py-4 w-[90%] border-[1px] border-[#e9e9e9]">
-              <Image src={searchIcon} alt="Search Icon" />
-              <input
-                className="bg-transparent outline-none h-full w-full text-[#666666] font-base"
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Image src={filterIcon} alt="Filter Icon" />
-          </div>
-          <div className="flex flex-col gap-3 items-start">
+          <div className="flex gap-x-3 rounded-md bg-[#ffffff] pl-6 py-4 w-full border-[1px] border-[#e9e9e9]">
+                <Image src={searchIcon} alt="Search Icon" />
+                <input
+                  className="bg-transparent outline-none h-full w-full text-[#666666] font-base"
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+          <div className="flex gap-3 items-start">
             
             <CoursesSelection onCourseChange={setSelectedCourse} />
             <CohortSelection onCohortChange={setSelectedCohort} />
           </div>
           <div className="overflow-x-auto mt-4">
+            {errorState ? (<Error />) : (
             <table className="min-w-full bg-white border border-gray-200">
               <thead>
                 <tr className="text-black">
@@ -173,6 +179,7 @@ function Page() {
                 ))}
               </tbody>
             </table>
+            )}
           </div>
         </div>
       )}

@@ -15,9 +15,10 @@ import Avatar from "@/app/components/avatar.js";
 import present from "../../../../public/assets/PRESENT.svg";
 import absent from "../../../../public/assets/absent.svg";
 import left from "../../../../public/assets/left.svg"
+import Error from "@/app/components/error.js";
 
 function Page() {
-  const { user, logout, error } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [showSideBar, setShowSideBar] = useState(false);
   const [students, setStudents] = useState([]);
   const [notification, setNotification] = useState("");
@@ -26,6 +27,7 @@ function Page() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedCohort, setSelectedCohort] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorState, setErrorState] = useState ("false");
   const currentPage = "Mark Attendance";
 
   useEffect(() => {
@@ -44,8 +46,10 @@ function Page() {
             initialAttendanceStatus[student._id] = null;
           });
           setAttendanceStatus(initialAttendanceStatus);
+          setErrorState("false");
         } catch (error) {
           console.error("Error fetching students:", error);
+          setErrorState("true");
         }
       }
     };
@@ -140,7 +144,7 @@ function Page() {
           <Navbar />
           <div className="py-[20px]  px-8 gap-y-4 flex flex-col">
             <h1 className="text-[#1a1a1a] text-center font-semibold">Mark Attendance</h1>
-            {error && <p className="text-red-500">{error}</p>}
+            {/* {error && <p className="text-red-500">{error}</p>} */}
         
               <div className="flex gap-x-3 rounded-md bg-[#ffffff] pl-6 py-4 w-[90%] border-[1px] border-[#e9e9e9]">
                 <Image src={searchIcon} alt="Search Icon" />
@@ -171,7 +175,9 @@ function Page() {
 
             {/* Display Students List */}
             
+            
             <div className="mt-4 py-3">
+            {errorState ? (<Error />) : (
               <div className="grid gap-3 md:gap-x-6 gap-x-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
                 {filteredStudents.length > 0 ? (
                   filteredStudents.map((student) => (
@@ -202,10 +208,12 @@ function Page() {
                     </div>
                   ))
                 ) : (
-                  <li>No students found</li>
+                  <li className="text-[#222222]">No students found</li>
                 )}
               </div>
+               )}
             </div>
+           
           </div>
         </div>
       </div>
@@ -237,7 +245,7 @@ function Page() {
               </div>
               </div>
       
-
+              {errorState ? (<Error />) : (
         <div className="grid py-3 grid-cols-2 gap-3">
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student) => (
@@ -267,9 +275,10 @@ function Page() {
               </div>
             ))
           ) : (
-            <li>No students found</li>
+            <li className="text-[#222222]">No students found</li>
           )}
         </div>
+              )}
       </div>
     </>
   );
