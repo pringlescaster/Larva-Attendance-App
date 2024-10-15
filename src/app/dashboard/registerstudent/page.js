@@ -257,7 +257,7 @@ function Page() {
             </button>
           </form>
         
-          {message && <p className="text-center mt-4">{message}</p>}
+          
         </div>
               )}
       </div>
