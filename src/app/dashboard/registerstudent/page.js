@@ -7,21 +7,22 @@ import Navbar from "@/app/components/navbar";
 import Success from "@/app/components/success";
 import Image from "next/image";
 import registerProfile from "../../../../public/assets/registerProfile.svg";
+import loading from "../../../../public/assets/rolling.gif";
 import axios from "axios";
 
 function Page() {
   const { user, logout, error } = useContext(AuthContext);
   const [showSideBar, setShowSideBar] = useState(false);
-  const [ showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [studentData, setStudentData] = useState({
     name: "",
     studentnumber: "",
     course: "",
     cohort: "",
   });
+  const [loadingState, setLoadingState] = useState(false);
   const currentPage = "Register Student";
   const [message, setMessage] = useState("");
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,40 +41,42 @@ function Page() {
       return;
     }
 
-  try {
-    const response = await axios.post(
-      "https://larva-attendance-app-server.vercel.app/api/v1/student/register",
-      studentData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    setLoadingState(true); // Set loading state to true
+
+    try {
+      const response = await axios.post(
+        "https://larva-attendance-app-server.vercel.app/api/v1/student/register",
+        studentData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        setMessage("Student registered successfully");
+        setStudentData({
+          name: "",
+          studentnumber: "",
+          course: "",
+          cohort: "",
+        });
+
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+        }, 3000);
+      } else {
+        setMessage(response.data.message || "Error registering student");
       }
-    );
-
-    if (response.status === 201) {
-      setMessage ("Student registerd successfully");
-      setStudentData({  name: "",
-        studentnumber: "",
-        course: "",
-        cohort: "",
-      });
-
-      setShowSuccessModal(true);
-    setTimeout(() => {
-      setShowSuccessModal(false);
-    }, 3000);
-      
+    } catch (error) {
+      console.error("Error registering student:", error);
+      setMessage("Error registering student");
+    } finally {
+      setLoadingState(false)
     }
-    else { 
-      setMessage(response.data.message || " Error registering student");
-    }
-  } catch (error) {
-    console.error("Error registering student:", error);
-    setMessage("Error registering student");
-  }
-};
-    
+  };
 
   return (
     <>
@@ -100,7 +103,15 @@ function Page() {
             </h1>
           </div>
           <div className="">
+          {loadingState ? ( // Show loading GIF when loading
+                <Image 
+                  src={loading} 
+                  alt="Loading..." 
+                  className="w-16 mx-auto flex justify-center items-center mt-32 h-16 o"
+                />
+              ) : (
             <div className="py-8 gap-y-4 px-8 flex flex-col items-center max-w-lg mx-auto">
+
               <div className="flex flex-col gap-y-2">
                 <Image
                   className="w-[90px]"
@@ -111,57 +122,59 @@ function Page() {
                   Add Photo
                 </button>
               </div>
-              <form onSubmit={handleSubmit} className="w-full space-y-4 text-sm">
-                <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-                  type="text"
-                  name="name"
-                  value={studentData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Name"
-                />
-                 <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-                  type="text"
-                  name="course"
-                  value={studentData.course}
-                  onChange={handleChange}
-                  placeholder="Course"
-                  required
-                />
+              
+                <form onSubmit={handleSubmit} className="w-full space-y-4 text-sm">
+                  <input
+                    className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                    type="text"
+                    name="name"
+                    value={studentData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Name"
+                  />
+                  <input
+                    className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                    type="text"
+                    name="course"
+                    value={studentData.course}
+                    onChange={handleChange}
+                    placeholder="Course"
+                    required
+                  />
 
-                <div className="flex gap-x-[16px]">
-                <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-                  type="number"
-                  name="studentnumber"
-                  value={studentData.studentnumber}
-                  onChange={handleChange}
-                  placeholder="Student Number"
-                  required
-                />
-               
-                <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
-                  type="text"
-                  name="cohort"
-                  value={studentData.cohort}
-                  onChange={handleChange}
-                  placeholder="Cohort"
-                  required
-                />
-                </div>
-                
-                <button
-                  type="submit"
-                  className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"
-                >
-                  Register Student
-                </button>
-              </form>
+                  <div className="flex gap-x-[16px]">
+                    <input
+                      className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                      type="number"
+                      name="studentnumber"
+                      value={studentData.studentnumber}
+                      onChange={handleChange}
+                      placeholder="Student Number"
+                      required
+                    />
+                    <input
+                      className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                      type="text"
+                      name="cohort"
+                      value={studentData.cohort}
+                      onChange={handleChange}
+                      placeholder="Cohort"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"
+                  >
+                    Register Student
+                  </button>
+                </form>
+            
               {message && <p className="text-center mt-4">{message}</p>}
             </div>
+              )}
           </div>
         </div>
       </div>
@@ -174,13 +187,20 @@ function Page() {
         </div>
       )}
 
-
       {/* Mobile View - Registration Form */}
       <div className="md:hidden flex flex-col px-4 gap-y-4">
         <h1 className="text-[#1a1a1a] text-center font-semibold">
           Register Students
         </h1>
+        {loadingState ? ( // Show loading GIF when loading
+                <Image 
+                  src={loading} 
+                  alt="Loading..." 
+                  className="w-16 mx-auto flex justify-center items-center mt-32 h-16 o"
+                />
+              ) : (
         <div className="py-8 gap-y-6 px-8 flex flex-col items-center">
+          
           <div className="flex flex-col gap-y-2">
             <Image
               className="w-[100px]"
@@ -236,8 +256,10 @@ function Page() {
               Register Student
             </button>
           </form>
+        
           {message && <p className="text-center mt-4">{message}</p>}
         </div>
+              )}
       </div>
     </>
   );
