@@ -67,7 +67,7 @@ function Page() {
       }
 
       const imageUploadResponse = await axios.post(
-        "http://localhost:2000/api/v1/upload", 
+        "https://larva-attendance-app-server.vercel.app/api/v1/upload", 
         formData,
         {
           headers: {
