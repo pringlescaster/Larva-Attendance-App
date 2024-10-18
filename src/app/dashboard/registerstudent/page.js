@@ -63,7 +63,7 @@ function Page() {
       formData.append("cohort", studentData.cohort);
 
       if (image) {
-        formData.append("image", image);
+        formData.append('image', image);
       }
 
       const imageUploadResponse = await axios.post(
@@ -85,11 +85,11 @@ function Page() {
             studentnumber: studentData.studentnumber,
             course: studentData.course,
             cohort: studentData.cohort,
-            image: imageUploadResponse.data.imageUrl // Assuming the uploaded image URL is returned
+            image: imageUploadResponse.data.file.url
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
           }
         );
