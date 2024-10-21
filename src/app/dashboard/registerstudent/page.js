@@ -16,7 +16,7 @@ function Page() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  
+
   const [studentData, setStudentData] = useState({
     name: "",
     studentnumber: "",
@@ -61,55 +61,35 @@ function Page() {
       formData.append("studentnumber", studentData.studentnumber);
       formData.append("course", studentData.course);
       formData.append("cohort", studentData.cohort);
-      formData.append('image', image);
-      // formData.append('publicId', publicId);
-      
+      formData.append("image", image);
 
-      // const imageUploadResponse = await axios.post(
-      //   "https://larva-attendance-app-server.vercel.app/api/v1/upload", 
-      //   formData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-
-      if (imageUploadResponse.status === 200) {
-        const response = await axios.post(
-          "https://larva-attendance-app-server.vercel.app/api/v1/student/register",
-          {
-            name: studentData.name,
-            studentnumber: studentData.studentnumber,
-            course: studentData.course,
-            cohort: studentData.cohort,
-            image: imageUploadResponse.data.file.url
+      const response = await axios.post(
+        "https://larva-attendance-app-server.vercel.app/api/v1/student/register",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 201) {
-          setMessage("Student registered successfully");
-          setStudentData({
-            name: "",
-            studentnumber: "",
-            course: "",
-            cohort: "",
-          });
-          setImage(null);
-          setImagePreview(null);
-          setShowSuccessModal(true);
-          setTimeout(() => {
-            setShowSuccessModal(false);
-          }, 3000);
-        } else {
-          setMessage(response.data.message || "Error registering student");
         }
+      );
+
+      if (response.status === 201) {
+        setMessage("Student registered successfully");
+        setStudentData({
+          name: "",
+          studentnumber: "",
+          course: "",
+          cohort: "",
+        });
+        setImage(null);
+        setImagePreview(null);
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+        }, 3000);
+      } else {
+        setMessage(response.data.message || "Error registering student");
       }
     } catch (error) {
       console.error("Error registering student:", error);
@@ -292,16 +272,17 @@ function Page() {
                   />
                 )}
 
+                {/* Label for file input */}
                 <label
                   className="text-[#f39b3b] font-semibold cursor-pointer"
-                  htmlFor="fileInput"
+                  htmlFor="fileInputMobile"
                 >
                   Add Photo
                 </label>
 
                 <input
-                  id="fileInput"
-                  className="hidden"
+                  id="fileInputMobile"
+                  className="hidden" // Hide the actual input
                   type="file"
                   name="image"
                   accept="image/*"
@@ -310,7 +291,7 @@ function Page() {
               </div>
 
               <input
-                className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                className="rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                 type="text"
                 name="name"
                 value={studentData.name}
@@ -319,7 +300,7 @@ function Page() {
                 placeholder="Name"
               />
               <input
-                className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                className="rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                 type="text"
                 name="course"
                 value={studentData.course}
@@ -327,10 +308,9 @@ function Page() {
                 placeholder="Course"
                 required
               />
-
-              <div className="flex gap-x-[16px]">
+              <div className="grid grid-cols-2 gap-x-[16px]">
                 <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                  className="rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                   type="number"
                   name="studentnumber"
                   value={studentData.studentnumber}
@@ -339,7 +319,7 @@ function Page() {
                   required
                 />
                 <input
-                  className="w-full rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
+                  className="rounded-lg outline-[#F39B3B] text-[#222222] hover:border-[#F39B3B] bg-[#F9F9F9] px-4 py-3 border border-[#D3D3D3]"
                   type="text"
                   name="cohort"
                   value={studentData.cohort}
@@ -351,7 +331,7 @@ function Page() {
 
               <button
                 type="submit"
-                className="bg-[#f39b3b] mt-6 w-full py-3 px-4 rounded-md text-white text-md font-base"
+                className="bg-[#f39b3b] w-full py-3 px-4 rounded-md text-white text-md font-base"
               >
                 Register Student
               </button>
