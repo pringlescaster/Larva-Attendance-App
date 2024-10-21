@@ -9,6 +9,8 @@ import closeSideBar from "../../../public/assets/closeSideBar.svg";
 import Avatar from "./avatar";
 import { AuthContext } from "../../../context/authContext";
 
+
+
 function Sidebar({ closeSidebar }) {
   const [selectedLink, setSelectedLink] = useState("");
   const { user, logout } = useContext(AuthContext); // Accessing logout from context
@@ -22,6 +24,7 @@ function Sidebar({ closeSidebar }) {
     window.location.href = '/';
   };
 
+  
   return (
     <>
       {/* Desktop Sidebar */}

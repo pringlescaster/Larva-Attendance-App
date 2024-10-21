@@ -61,21 +61,20 @@ function Page() {
       formData.append("studentnumber", studentData.studentnumber);
       formData.append("course", studentData.course);
       formData.append("cohort", studentData.cohort);
+      formData.append('image', image);
+      // formData.append('publicId', publicId);
+      
 
-      if (image) {
-        formData.append('image', image);
-      }
-
-      const imageUploadResponse = await axios.post(
-        "https://larva-attendance-app-server.vercel.app/api/v1/upload", 
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const imageUploadResponse = await axios.post(
+      //   "https://larva-attendance-app-server.vercel.app/api/v1/upload", 
+      //   formData,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
       if (imageUploadResponse.status === 200) {
         const response = await axios.post(
